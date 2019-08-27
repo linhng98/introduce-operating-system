@@ -54,7 +54,7 @@ int main(int argc, char const *argv[])
 
     // get message from client
     printf("input your message bellow\n");
-    do
+    while(1)
     {
         memset(buff, 0, byte);
         fgets(buff, BUFFER_SIZE, stdin);
@@ -62,7 +62,7 @@ int main(int argc, char const *argv[])
         byte = write(client_sockfd, buff, strlen(buff));
         if (byte <= 0)
             error_handler("something wrong");
-    } while (strcmp(buff, "exit\n") != 0);
+    };
 
     free(buff);
     close(client_sockfd);

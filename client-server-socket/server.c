@@ -8,15 +8,16 @@
 #include <sys/types.h>
 #include <unistd.h>
 
-#define BUFFER_SIZE 1000     // size of buffer use to read write
-#define MAX_QUEUE_BACKLOG 10 // maximum amount of queue
-#define MAX_CONNECTION 3     // max amount of user can join group chat
-#define PORT 8080            // port number server use to listen
+#define BUFFER_SIZE 1000    // size of buffer use to read write
+#define MAX_QUEUE_BACKLOG 0 // maximum amount of queue
+#define MAX_CONNECTION 1    // max amount of user can join group chat
+#define PORT 8080           // port number server use to listen
 #define GREETING "hello client.... you has been connected"
 
 typedef struct sockaddr_in sockaddr_in;
 typedef struct sockaddr sockaddr;
 static int count_connection = 0;
+char global_buff[BUFFER_SIZE];
 
 pthread_mutex_t mutex = PTHREAD_MUTEX_INITIALIZER;
 
@@ -27,8 +28,8 @@ void error_handler(char *message)
 }
 
 // get index position which not using to store fd
-// just call this function when count_connection < MAX_CONNECTION
-int get_unused_index(int *arr, int n)
+// just call this function when count_connection < MAX_CONNECTION 
+   int get_unused_index(int *arr, int n)
 {
     for (int i = 0; i < n; i++)
     {
@@ -56,7 +57,6 @@ void *thread_serve_client(void *params)
     do
     {
         byte = read(fd, buff, BUFFER_SIZE);
-
         // if byte <= 0 mean connection closed or something error
         if (byte <= 0)
             break;
